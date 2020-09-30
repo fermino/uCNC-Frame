@@ -206,7 +206,7 @@ module XBridgeMotorSide(h, w, f, t, rd, rcd, md, dwd) {
     }
     
     // Placement of the wmotor mount box
-    translate([0, XB_h-(XB_rd*7/5)/2-XB_rcd/2-t-SHH/2, t]) {
+    translate([0, XB_h-(XB_rd*7/5)/2-XB_rcd/2-t-SHH/2-(dwd/2), t]) {
         // The motor mount plate.
         difference() {
             // Mount plate
@@ -248,11 +248,13 @@ module XBridgeMotorSide(h, w, f, t, rd, rcd, md, dwd) {
 // What to draw?
 if (draw=="all" || draw=="bs") {
     translate([-XB_w-2, 0, 0])
+    //XBridge(XB_h, XB_w, XB_f, XB_t, XB_rd, XB_rcd, XB_md, XB_dwd,
     XBridgeBearingSide(XB_h, XB_w, XB_f, XB_t, XB_rd, XB_rcd, XB_md, XB_dwd,
                        B_id, B_od, B_t);
 }
 if (draw=="all" || draw=="ms") {
     translate([2, 0, 0])
+    //XBridge(XB_h, XB_w, XB_f, XB_t, XB_rd, XB_rcd, XB_md, XB_dwd,
     XBridgeMotorSide(XB_h, XB_w, XB_f, XB_t, XB_rd, XB_rcd, XB_md, XB_dwd,
                      B_id, B_od, B_t);
 }
