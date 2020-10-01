@@ -18,11 +18,11 @@ railD = 8;      // Rails rod diameter
 XB_dwd = 6;   // Drive wire diameter
 XB_h = 62 + (XB_dwd/2);    // Height
 XB_w = 57;    // Width
-XB_f = 30;    // Length of foot piece
+XB_f = 43;    // Length of foot piece
 XB_t = wallT; // Wall thickness
 XB_rd = railD;// Diameter of rail rods
-XB_rcd = 20;  // Rails center distance - distance center-to-center
-XB_md = 4;    // Mount slits diameter in foot.
+XB_rcd = 30;  // Rails center distance - distance center-to-center
+XB_md = 3.5;    // Mount slits diameter in foot.
 
 // XBridge bearing side bearing params
 B_od = 11;

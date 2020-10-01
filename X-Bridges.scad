@@ -16,7 +16,7 @@ draw = "all";
 //------------------------------------
 
 // Version number for X Bridges
-_version = "v0.10";
+_version = "v0.11";
 
 include <Configuration.scad>;
 use <ToolsLib.scad>;
@@ -193,8 +193,8 @@ module XBridgeBearingSide(h, w, f, t, rd, rcd, md, dwd, b_id, b_od, b_t) {
     }
         
     // The version number
-    translate([t+2, t+2, t])
-        Version(h=0.5, s=3, v=_version);
+    //translate([t+2, t+2, t])
+    //    Version(h=0.5, s=3, v=_version);
 
 }
 
@@ -246,8 +246,8 @@ module XBridgeMotorSide(h, w, f, t, rd, rcd, md, dwd) {
     }
         
     // The version number
-    translate([t+2, t+2, t])
-        Version(h=0.5, s=3, v=_version);
+    //translate([t+2, t+2, t])
+    //    Version(h=0.5, s=3, v=_version);
 
 }
 
