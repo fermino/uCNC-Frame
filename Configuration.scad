@@ -11,13 +11,13 @@
 $fn=120;
 
 // General paramaters
-wallT = 1.8;    // General wall thicknes for more uniform parts
+wallT = 2.5;    // General wall thicknes for more uniform parts
 railD = 8;      // Rails rod diameter
 
 // XBridge general sizes
 XB_dwd = 6;   // Drive wire diameter
-XB_h = 52 + (XB_dwd/2);    // Height
-XB_w = 47;    // Width
+XB_h = 62 + (XB_dwd/2);    // Height
+XB_w = 57;    // Width
 XB_f = 30;    // Length of foot piece
 XB_t = wallT; // Wall thickness
 XB_rd = railD;// Diameter of rail rods

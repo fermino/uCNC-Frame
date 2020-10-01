@@ -6,7 +6,7 @@
 // Draw/print Control
 
 // Set to true to draw for printing - motor and bearing will not be drawn
-print = false;
+print = true;
 
 // What to draw? One of:
 // "bs" for bearing side bridge
@@ -49,7 +49,7 @@ module XBridge(h, w, f, t, rd, rcd, md, dwd) {
 
     // Clearance amount for drive wire thickness - i.o.w how much wider is the
     // total width including clearance
-    dwdC = 1.2;
+    dwdC = 1.4;
 
     // The face
     difference() {
@@ -85,9 +85,13 @@ module XBridge(h, w, f, t, rd, rcd, md, dwd) {
                 cylinder(h=t*4+2, d=rd);
         }
 
+        slot_width = rOd * 2.2;
+        //echo(slot_width);
+        //echo(dwd*dwdC);
+
         // The drive wire slit ½ way between the hole centers
-        translate([w/2-rOd*1.4/2, h-rOd/2-rcd/2-(dwd*dwdC)/2, -1])
-            cube([rOd*1.4, dwd*dwdC, t*4+2]);
+        translate([w/2-slot_width/2, h-rOd/2-rcd/2-(dwd*dwdC)/2, -1])
+            cube([slot_width, dwd*dwdC, t*4+2]);
     }
 
     // A thin support rib on each side
@@ -154,20 +158,22 @@ module XBridgeBearingSide(h, w, f, t, rd, rcd, md, dwd, b_id, b_od, b_t) {
             cube([rOd+1, b_t+0.4, b_od], center=true);
     }
     
+    additional_depth = 5;
+    
     // Placement of the bearing box
-    translate([w/2, h-(rd*7/5)/2-rcd/2, b_od/2+t]) {
+    translate([w/2, h-(rd*7/5)/2-rcd/2, b_od/2+t+additional_depth/2]) {
         // The bearing box.
         difference() {
             union() {
                 // Outer box including 0.2 mm clearance above/below bearing
-                cube([b_od, b_t+t*3+0.4, b_od/2+t*3], center=true);
+                cube([b_od, b_t+t*3+0.4, b_od/2+t*3+additional_depth], center=true);
                 translate([0, 0, t*3])
                     rotate([-90, 0, 0])
                     cylinder(h=b_t+t*3+0.4, d=b_od, center=true);
             }
             // Cut out bearing space
             translate([0, 0, (b_od/2+t*3)/2])
-                cube([b_od+1, b_t+0.4, b_od+t*3+1], center=true);
+                cube([b_od+1, b_t+0.4+1.8, b_od+t*3+1], center=true);
             // Open up the wire slit again. The bridge base defines the width
             // of the slit as dwdC which 1.2 * dwd, and the breadth as 1.4xrOd
             cube([rOd*1.4, dwd*1.2, b_od+t*3], center=true);
