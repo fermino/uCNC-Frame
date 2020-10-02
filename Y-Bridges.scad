@@ -83,14 +83,14 @@ module YBridge(h=YB_h, l=YB_l, t=YB_t, rcd=YB_rcd, rd=YB_rd, dwd=YB_dwd, dwhd=10
                     translate([x, y, h-t])
                         cylinder(d=rbw, h=t);
             // Add the front wall - 1/3rd of height below top surface
-            cube([w, t, h/3+t]);
+            cube([w, t, h]);
             // The center lower bit for the wire guide slots. We use the motor
             // shaft coupling diameter variable (YB_mscd) direct from the config
             // imported here since it is not passed in as parameter - not sure
             // how to handle this in a better way yet.
             // This value is used to determine the width of the lower center bit.
             mscd = YB_mscd+4;
-            hull() {
+            *hull() {
                 translate([w/2-mscd, 0, h/3+t-1])
                     cube([mscd*2, t, 1]);
                 translate([w/2-mscd/2, 0, t])
@@ -114,19 +114,28 @@ module YBridge(h=YB_h, l=YB_l, t=YB_t, rcd=YB_rcd, rd=YB_rd, dwd=YB_dwd, dwhd=10
         for (x=[rbw/2, w-rbw/2])
             for (y=[rhd+rbw/2, l-rbw/2])
                 translate([x, y, -1])
-                    cylinder(d=rd, h=h+2);
+                    cylinder(d=Y_screw_d, h=h+2);
         // Unneeded foot bits
         translate([-1, rhd+rbw, t+1])
             cube([w+2, l-rhd-2*rbw, h]);
 
+        // Espacio para la correa
+        //rOd = rd+rd*2/5
+        slot_width = (rd+rd*2/5) * 2.2;
+
+        echo(slot_width);
+        //echo(dwd*dwdC);
+        translate([(w-slot_width)/2, -1, t])
+            //cube([slot_width, t+2, dwd*dwdC]);
+            cube([slot_width, t+2, h-t-t]);
         // Drive wire holes and slits
-        for(x=[w/2-dwhd/2, w/2+dwhd/2])
+        /*for(x=[w/2-dwhd/2, w/2+dwhd/2])
             translate([x, -1, h/3]) {
                 rotate([-90, 0, 0])
                     cylinder(d=dwd*dwdC, h=t+2);
                 translate([-(dwd*dwdC/2), 0, 0])
                     cube([dwd*dwdC, t+2, h]);
-            }
+            }//*/
     }
     // The version number
     translate([rbw+2, t+2, t])

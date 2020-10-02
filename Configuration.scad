@@ -133,15 +133,17 @@ ZC_cd = ZC_cw+2;  // Carraige depth excluding the rear half bushings
 ZC_ch = 50;   // Carraige height
 
 // Y Bridge config
+Y_screw_d = 4;
+
 YB_t = wallT; // Thickness for all walls
 // The height of the bridge should be just enough to clear the motor shaft plus
 // a 4mm tolerance. The motor sticks through the top of the bridge which also
 // has a thickness to take into account.
-YB_h = SHH+5-YB_t;  // Height
+YB_h = SHH+5-YB_t+5;  // Height
 YB_l = 40;          // Lenght (front to back)
 YB_rcd = 50;        // Rails center distance - distance center-to-center
 YB_rd = railD;      // Diameter of rail rods
-YB_dwd = 1;         // Drive wire diameter
+YB_dwd = 6;         // Drive wire diameter
 
 YB_mscd = 10; // The motor shaft coupling diameter that will be used motor.
               // This is to determine the how wide apart to make the drive wire
