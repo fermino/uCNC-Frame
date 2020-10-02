@@ -1,6 +1,14 @@
 uCNC mechanics remix
 ====================
 
+This is a remix of the remix made by @fizterra. 
+It's made to adapt uCNC to use bigger bearings, a GT2 belt and a couple other things. 
+It's my very first attempt to use OpenSCAD for anything, so far it's been fun :)
+
+Hey! It might not be pretty, but it works!
+
+---
+
 This is a remix (rebuild, really) of the mechanical part of the
 _uCNC Controller_ by **dherrendoerfer** :
 
