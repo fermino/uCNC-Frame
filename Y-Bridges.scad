@@ -138,7 +138,7 @@ module YBridge(h=YB_h, l=YB_l, t=YB_t, rcd=YB_rcd, rd=YB_rd, dwd=YB_dwd, dwhd=10
             }//*/
     }
     // The version number
-    translate([rbw+2, t+2, t])
+    *translate([rbw+2, t+2, t])
         rotate([0, 0, 90])
             Version(h=0.5, s=3, v=_version, valign="top", halign="left");
 }
@@ -202,8 +202,10 @@ module YBridgeMotorSide(h=YB_h, l=YB_l, t=YB_t, rcd=YB_rcd, rd=YB_rd, dwd=YB_dwd
  * @param b_t: Bearing thickness
  
  **/
+bearing_offset = 2.1;
+
 module YBridgeBearingSide(h=YB_h, l=YB_l, t=YB_t, rcd=YB_rcd, rd=YB_rd, dwd=YB_dwd,
-                          b_id=B_id, b_od=B_od, b_t=B_t) {
+                          b_id=B_h, b_od=B_od, b_t=B_t/2) {
     
     // The feet widths
     rbw = yBridgeFootWidth(rd);
@@ -212,7 +214,7 @@ module YBridgeBearingSide(h=YB_h, l=YB_l, t=YB_t, rcd=YB_rcd, rd=YB_rd, dwd=YB_d
 
     // We try to get the bearing as close to the front wall as possible. This
     // value is the gap between the bearing and the front wall
-    bg = 1;
+    bg = 2;
     // Now we can calculate the bearing center offset from the front
     bco = t+bg+b_od/2;
     // We want the bearing verticle center to be in the in the bridge verticle
@@ -229,26 +231,31 @@ module YBridgeBearingSide(h=YB_h, l=YB_l, t=YB_t, rcd=YB_rcd, rd=YB_rd, dwd=YB_d
         union() {
             // The base bridge
             YBridge(h, l, t, rcd, rd, dwhd=b_od);
-            // The bearing filling to center it vertcally - we remove 1mm off
-            // the fill to add it as a smaller washer area in the bearing
-            // center later
-            translate([w/2, bco, t])
-                cylinder(d=b_od+bg+t, h=bft-1);
-            // Square the fill off to the front edge
-            translate([w/2-(bco+bg+t)/2, 0, t])
-                cube([bco+bg+t, bco+bg+t, bft-1]);
-            // Add the 1mm shim so we do not need a washer
-            translate([w/2, bco, t])
-                cylinder(d=b_id+(b_od-b_id)/2, h=bft);
-            // And add a center piece to fit bearing over, slightly less than
-            // the ID
-            translate([w/2, bco, t+bft])
-                cylinder(d=b_id-0.4, h=b_t-1);
+
+            translate([0, 0, -bearing_offset])
+            union()
+            {
+                // The bearing filling to center it vertcally - we remove 1mm off
+                // the fill to add it as a smaller washer area in the bearing
+                // center later
+                translate([w/2, bco, t])
+                    cylinder(d=b_od+bg+t, h=bft-1);
+                // Square the fill off to the front edge
+                translate([w/2-(bco+bg+t+t+t)/2, 0, t])
+                    cube([bco+bg+t*3, bco+bg+t, bft-1]);
+                // Add the 1mm shim so we do not need a washer
+                translate([w/2, bco, t])
+                    cylinder(d=b_id+(b_od-b_id)/2, h=bft);
+                // And add a center piece to fit bearing over, slightly less than
+                // the ID
+                translate([w/2, bco, t+bft])
+                    cylinder(d=b_id-0.4, h=b_t-1);
+            }
         }
         
         // Hole for screw to secure bearing
         translate([w/2, bco, -1])
-            cylinder(d=2.5, h=h+2);
+            cylinder(d=Y_screw_d, h=h+2);
 
         // The "vent" hole in the back
         translate([w/2, l-(l-t-bg-b_od-2)/2, -1])
@@ -257,7 +264,7 @@ module YBridgeBearingSide(h=YB_h, l=YB_l, t=YB_t, rcd=YB_rcd, rd=YB_rd, dwd=YB_d
 
     // Add the bearing if we are modeling or design fitting
     if(_setting=="designFit" || _setting=="model") {
-        translate([w/2, bco, t+bft+b_t/2])
+        translate([w/2, bco, t+bft+b_t/2 - bearing_offset])
             color("silver", 0.7)
             Bearing(b_id, b_od, b_t);
     }
