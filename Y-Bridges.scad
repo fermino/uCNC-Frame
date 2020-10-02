@@ -324,19 +324,36 @@ module YCarraige(l=YC_l, t=YC_t, rcd=YC_rcd, rd=YC_rd, bl=YC_bl, bt=YC_bt,
                 cube([dwhd+t*3, 10, t*2]);
         }
         // Stuff to remove
+
+        mag_d = YBD_mmd;
+        mag_h = YBD_mmt;
+
+        mag_mult = 1;
+
+        // This is freaking elegant, isn't it ;)
+        translate([w/2, l/2, 0])
+            for(i = [-1:2:1])
+                for(j = [-1:2:1])
+                    translate([(w/8 + mag_d*mag_mult) * i, (l/2 - mag_d*mag_mult/2 - l/12) * j, -1])
+                        cylinder(mag_h * mag_mult + 1, d=mag_d * mag_mult);
+        translate([w/2, l/2, -1])
+            cylinder(h=mag_h*mag_mult + 1, d=mag_d*mag_mult);
+
         // The bushing holes
         for (x=[bw/2, w-bw/2])
             translate([x, -1, t+rd/2+bc+0.2])
                 rotate([-90, 0, 0])
                     cylinder(d=rd+bc, h=l+2);
         // Drive wire securing holes in the drive wire securing block
-        for (x=[(w-dwhd)/2, (w+dwhd)/2])
+        /*for (x=[(w-dwhd)/2, (w+dwhd)/2])
             for (y=[(l-10)/2, (l+10)/2 - 4])
                 translate([x, y+2, t])
-                    cylinder(d=2, h=t*2+1);
+                    cylinder(d=2, h=t*2+1);*/
+
+        // TO DO: COSO QUE AGARRE LA CORREA
         
         // Do we make either magnet recess or mount holes, or both?
-        if(mhd>0) {
+        /*if(mhd>0) {
             // X position for the holes is ¼ in from the edges
             for (x=[w/4, w-w/4])
                 // TODO: We need to refactor this somehow since we do the same
