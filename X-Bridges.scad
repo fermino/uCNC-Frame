@@ -170,7 +170,8 @@ module XBridgeBearingSide(h, w, f, t, rd, rcd, md, dwd, b_id, b_od, b_t, b_h) {
                 difference() {
                     union() {
                         // Outer box including 0.2 mm clearance above/below bearing
-                        cube([b_od, b_t+t*3+0.4, b_od/2+t*3+additional_depth], center=true);
+                        translate([0, 0, -additional_depth+2])
+                            cube([b_od, b_t+t*3+0.4, b_od/2+t*3+additional_depth], center=true);
                         translate([0, 0, t*3])
                             rotate([-90, 0, 0])
                             cylinder(h=b_t+t*3+0.4, d=b_od, center=true);
