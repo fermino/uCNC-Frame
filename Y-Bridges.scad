@@ -29,6 +29,7 @@ _version = "v0.6";
 include <Configuration.scad>;
 use <ToolsLib.scad>;
 use <StepMotor_28BYJ-48.scad>;
+use <gt2belt.scad>;
 
 // The width of the bridge feet is 2/5ths wider than the rod diameter that fits
 // into it.
@@ -289,7 +290,7 @@ module YBridgeBearingSide(h=YB_h, l=YB_l, t=YB_t, rcd=YB_rcd, rd=YB_rd, dwd=YB_d
  * @param dwhd Drive wire hode distance - how far apart the drive wires will run
  **/
 module YCarraige(l=YC_l, t=YC_t, rcd=YC_rcd, rd=YC_rd, bl=YC_bl, bt=YC_bt,
-                 bmhd=YC_bmhd, bmmd=YC_bmmd, dwhd=10) {
+                 bmhd=YC_bmhd, bmmd=YC_bmmd, dwhd=20) {
     // Calculate the carraige width based on distance between rods and bushing
     // wall thickness
     w = rcd + rd + 2*bt;
@@ -320,8 +321,49 @@ module YCarraige(l=YC_l, t=YC_t, rcd=YC_rcd, rd=YC_rd, bl=YC_bl, bt=YC_bt,
                             cylinder(d=bw, h=bl);
                 }
             // Central cube for drive wire attachment
-            translate([(w-dwhd)/2-t*1.5, (l-10)/2, t])
-                cube([dwhd+t*3, 10, t*2]);
+            //translate([(w-dwhd)/2-t*1.5, (l-10)/2, t])
+                //*#cube([dwhd+t*3, 10, t*2]);
+
+
+            // Belt box
+            c_w = w/4;
+            c_l = l/1.72;
+            c_h = rd*1.25;
+            c_clearance = 5;
+            belt_space = 4;
+
+            // Distance relative to x
+            belt_distx = 7.5;
+
+            translate([w/2 + belt_distx, (l-c_l)/2, t])
+            difference()
+            {
+                union()
+                {
+                    // Toothed part
+                    cube([c_clearance, c_l, c_h]);
+                    translate([c_clearance, 0, 0])
+                        rotate([0, 0, 90])
+                            gt2_belt(c_l, c_h);
+                    mirror([0, 1, 0])
+                        translate([0, 0, 0])
+                            rotate([0, 0, -90])
+                                gt2_belt(c_l, c_h);
+
+                    // Mounting part
+                    translate([c_clearance + 2.25, 0, 0])
+                        cube([c_clearance, c_l, c_h]);
+                }
+
+                translate([-1, (c_l - belt_space)/2, 0])
+                    cube([c_clearance + 1 * 2, belt_space, c_h+1]);
+
+                translate([c_clearance + 1.75, c_l/2, c_h/2])
+                    rotate([0, 90, 0])
+                        cylinder(h=c_clearance+2, d=YBD_mhd, center=false);
+            }
+
+
         }
         // Stuff to remove
 
@@ -344,13 +386,13 @@ module YCarraige(l=YC_l, t=YC_t, rcd=YC_rcd, rd=YC_rd, bl=YC_bl, bt=YC_bt,
             translate([x, -1, t+rd/2+bc+0.2])
                 rotate([-90, 0, 0])
                     cylinder(d=rd+bc, h=l+2);
+
+
         // Drive wire securing holes in the drive wire securing block
         /*for (x=[(w-dwhd)/2, (w+dwhd)/2])
             for (y=[(l-10)/2, (l+10)/2 - 4])
                 translate([x, y+2, t])
                     cylinder(d=2, h=t*2+1);*/
-
-        // TO DO: COSO QUE AGARRE LA CORREA
         
         // Do we make either magnet recess or mount holes, or both?
         /*if(mhd>0) {
@@ -368,17 +410,17 @@ module YCarraige(l=YC_l, t=YC_t, rcd=YC_rcd, rd=YC_rd, bl=YC_bl, bt=YC_bt,
                     translate([x, y, -1])
                         cylinder(d=bmhd, h=t+2);
                 }
-        }
+        }*/
     }
     // The version number
-    translate([w/2, t+2, t])
+    *translate([w/2, t+2, t])
             Version(h=0.5, s=3, v=_version, valign="bottom", halign="center");
     // Show the magnets if we are modeling or design fitting
     if((_setting=="designFit" || _setting=="model") && bmmd>0) {
         for (x=[w/4, w-w/4])
             // TODO: We need to refactor this somehow since we do the same
             //       thing in multiple places on the carraige and bed
-            for (y=[2+mhd/2, l-2-mhd/2]) {
+            *for (y=[2+mhd/2, l-2-mhd/2]) {
                 translate([x, y, 0.8])
                     color("silver")
                         // Assume 3mm thick magnets
