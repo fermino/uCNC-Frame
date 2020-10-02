@@ -144,7 +144,7 @@ module XBridge(h, w, f, t, rd, rcd, md, dwd) {
  * @param b_od: Bearing outer diameter
  * @param b_t: Bearing thickness
  **/
-module XBridgeBearingSide(h, w, f, t, rd, rcd, md, dwd, b_id, b_od, b_t) {
+module XBridgeBearingSide(h, w, f, t, rd, rcd, md, dwd, b_id, b_od, b_t, b_h) {
     // The support rib in the XBridge is 2/5ths wider than the rod diameter
     // and 3 times the plate thickness
     rOd = rd+rd*2/5;
@@ -163,32 +163,50 @@ module XBridgeBearingSide(h, w, f, t, rd, rcd, md, dwd, b_id, b_od, b_t) {
     // Placement of the bearing box
     translate([w/2, h-(rd*7/5)/2-rcd/2, b_od/2+t+additional_depth/2]) {
         // The bearing box.
-        difference() {
-            union() {
-                // Outer box including 0.2 mm clearance above/below bearing
-                cube([b_od, b_t+t*3+0.4, b_od/2+t*3+additional_depth], center=true);
-                translate([0, 0, t*3])
-                    rotate([-90, 0, 0])
-                    cylinder(h=b_t+t*3+0.4, d=b_od, center=true);
-            }
-            // Cut out bearing space
-            translate([0, 0, (b_od/2+t*3)/2])
-                cube([b_od+1, b_t+0.4+1.8, b_od+t*3+1], center=true);
-            // Open up the wire slit again. The bridge base defines the width
-            // of the slit as dwdC which 1.2 * dwd, and the breadth as 1.4xrOd
-            cube([rOd*1.4, dwd*1.2, b_od+t*3], center=true);
+        difference()
+        {
+            union()
+            {
+                difference() {
+                    union() {
+                        // Outer box including 0.2 mm clearance above/below bearing
+                        cube([b_od, b_t+t*3+0.4, b_od/2+t*3+additional_depth], center=true);
+                        translate([0, 0, t*3])
+                            rotate([-90, 0, 0])
+                            cylinder(h=b_t+t*3+0.4, d=b_od, center=true);
+                    }
+                    // Cut out bearing space
+                    //translate([0, 0, (b_od/2+t*3)/2-additional_depth])
+                       //#cube([b_od+1, b_t+0.4, b_od+t*3+1+additional_depth], center=true);
+                       //#cube([b_od+1, b_t*2, b_od+t*3+1+additional_depth], center=true);
 
+                    // Open up the wire slit again. The bridge base defines the width
+                    // of the slit as dwdC which 1.2 * dwd, and the breadth as 1.4xrOd
+                    cube([b_od+2, dwd*1.4, b_od*2], center=true);
+                    //echo(dwd*1.4);
+                }
+                // The bearing sample if not printing
+                if (print == false) {
+                    translate([0, 0, t*3])
+                    rotate([-90, 0, 0])
+                        color("Silver")
+                            Bearing(b_id, b_od, b_t);
+                }
+                // Aletitas para el rulemán
+                translate([0, 0, t*3])
+                rotate([-90, 0, 0])
+                    cylinder(h=b_t*1.4+1, d=b_h*1.2, center=true);
+                    echo(b_h*1.2);
+            }
             // mounting holes
             translate([0, 0, t*3])
             rotate([-90, 0, 0])
+            {
                 cylinder(d=b_id, h=b_t+t*3+1, center=true);
-        }
-        // The bearing sample if not printing
-        if (print == false) {
-            translate([0, 0, t*3])
-            rotate([-90, 0, 0])
-                color("Silver")
-                    Bearing(b_id, b_od, b_t);
+                cylinder(h=b_t, d=b_h*1.2*1.1, center=true);
+                //echo(b_t);
+            }
+
         }
     }
         
@@ -256,7 +274,7 @@ if (draw=="all" || draw=="bs") {
     translate([-XB_w-2, 0, 0])
     //XBridge(XB_h, XB_w, XB_f, XB_t, XB_rd, XB_rcd, XB_md, XB_dwd,
     XBridgeBearingSide(XB_h, XB_w, XB_f, XB_t, XB_rd, XB_rcd, XB_md, XB_dwd,
-                       B_id, B_od, B_t);
+                       B_id, B_od, B_t, B_h);
 }
 if (draw=="all" || draw=="ms") {
     translate([2, 0, 0])

@@ -25,9 +25,12 @@ XB_rcd = 30;  // Rails center distance - distance center-to-center
 XB_md = 3.5;    // Mount slits diameter in foot.
 
 // XBridge bearing side bearing params
-B_od = 11;
-B_id = 5;
-B_t = 5;
+B_od = 22;
+// This became the hole for the screw
+B_id = 4;
+// The actual bearing hole
+B_h = 8;
+B_t = 6;
 
 // XCarriage parameters
 XC_w = 20;      // Width
